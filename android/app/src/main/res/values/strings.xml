@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Estudio Activo</string>
+    <string name="title_activity_main">Estudio Activo</string>
+    <string name="package_name">com.luisgarvia.estudioactivo</string>
+    <string name="custom_url_scheme">com.luisgarvia.estudioactivo</string>
+</resources>

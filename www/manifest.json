@@ -1,0 +1,21 @@
+{
+  "short_name": "EstudioActivo",
+  "name": "Estudio Activo - Soberanía Cognitiva",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#121212",
+  "theme_color": "#181818",
+  "display": "standalone",
+  "orientation": "portrait"
+}

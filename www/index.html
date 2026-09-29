@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio Activo — Soberanía Cognitiva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0e14;
+            --surface-color: rgba(22, 27, 34, 0.7);
+            --surface-border: rgba(255, 255, 255, 0.08);
+            --primary-color: #58a6ff;
+            --primary-gradient: linear-gradient(135deg, #388bfd, #79c0ff);
+            --accent-purple: #ab7df8;
+            --text-color: #f0f6fc;
+            --text-muted: #8b949e;
+            --success-color: #3fb950;
+            --error-color: #f85149;
+            --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --glow: 0 0 20px rgba(56, 139, 253, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 139, 253, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(171, 125, 248, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-color);
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+            overflow-x: hidden;
+        }
+
+        header {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px 0;
+        }
+
+        header .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        header .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1f6feb, #ab7df8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 15px rgba(31, 111, 235, 0.3);
+        }
+
+        header h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(120deg, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header .status-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        header .status-badge.active {
+            background: rgba(63, 185, 80, 0.1);
+            border-color: rgba(63, 185, 80, 0.3);
+            color: var(--success-color);
+            box-shadow: 0 0 10px rgba(63, 185, 80, 0.1);
+        }
+
+        .glass-card {
+            background: var(--surface-color);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--surface-border);
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(88, 166, 255, 0.2);
+        }
+
+        .glass-card h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Folder Selection Widget */
+        .folder-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-action {
+            background: var(--primary-gradient);
+            color: #0b0e14;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(56, 139, 253, 0.2);
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-action:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 5px rgba(56, 139, 253, 0.1);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--surface-border);
+            color: var(--text-color);
+            box-shadow: none;
+        }
+
+        .btn-secondary:active {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: none;
+        }
+
+        .folder-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .folder-info-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 75%;
+        }
+
+        .folder-info-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .folder-info-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .img-count-badge {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--primary-color);
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        /* Carousel Widget */
+        .carousel-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .viewer-box {
+            width: 100%;
+            height: 380px;
+            border-radius: 16px;
+            background: #07090e;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: inset 0 4px 20px rgba(0,0,0,0.8);
+        }
+
+        .viewer-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: opacity 0.25s ease-in-out;
+        }
+
+        .viewer-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 40px;
+        }
+
+        .viewer-placeholder svg {
+            width: 48px;
+            height: 48px;
+            stroke: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        .carousel-controls {
+            display: grid;
+            grid-template-columns: 60px 1fr 60px;
+            width: 100%;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-nav {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--surface-border);
+            color: var(--text-color);
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-nav:active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .slide-info {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow: hidden;
+        }
+
+        .slide-filename {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .slide-index {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Config Grid */
+        .config-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .row-config {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .config-label-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            max-width: 70%;
+        }
+
+        .config-label {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .config-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* Switch UI */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: .3s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+            background-image: var(--primary-gradient);
+            border-color: transparent;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Dropdowns & Selects */
+        .select-custom {
+            background: #161b22;
+            color: var(--text-color);
+            border: 1px solid var(--surface-border);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            outline: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* Action Footer */
+        .action-footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        /* Toast Popup */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+            width: calc(100% - 40px);
+            max-width: 380px;
+        }
+
+        .toast {
+            background: rgba(22, 27, 34, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--surface-border);
+            padding: 14px 20px;
+            border-radius: 12px;
+            color: var(--text-color);
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--success-color);
+        }
+        .toast-success .toast-icon {
+            background: rgba(63, 185, 80, 0.2);
+            color: var(--success-color);
+        }
+
+        .toast-error {
+            border-left: 4px solid var(--error-color);
+        }
+        .toast-error .toast-icon {
+            background: rgba(248, 81, 73, 0.2);
+            color: var(--error-color);
+        }
+    </style>
+    <!-- Capacitor nativo core -->
+    <script src="capacitor.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <div class="logo">🧠</div>
+            <h1>Estudio Activo</h1>
+        </div>
+        <div id="status-badge" class="status-badge">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: currentColor;"></span>
+            <span>Rotación inactiva</span>
+        </div>
+    </header>
+
+    <!-- 1. Folder Selector Card -->
+    <div class="glass-card">
+        <h2>📂 Carpeta de Fichas</h2>
+        <div class="folder-section">
+            <div id="folder-empty-state">
+                <button class="btn-action" onclick="seleccionarCarpeta()">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    Vincular Carpeta de Estudio
+                </button>
+                <div style="font-size: 0.78rem; color: var(--text-muted); text-align: center; margin-top: 8px;">
+                    Selecciona el directorio local de tus fichas (ej. Syncthing)
+                </div>
+            </div>
+            
+            <div id="folder-loaded-state" style="display: none;">
+                <div class="folder-info">
+                    <div class="folder-info-text">
+                        <div id="folder-display-name" class="folder-info-title">Fichas de aprendizaje</div>
+                        <div id="folder-display-path" class="folder-info-sub">content://com.android...</div>
+                    </div>
+                    <span id="image-count" class="img-count-badge">0 fichas</span>
+                </div>
+                <button class="btn-action btn-secondary" onclick="seleccionarCarpeta()" style="margin-top: 10px; padding: 10px;">
+                    Cambiar Carpeta Vinculada
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Carousel Viewer Card -->
+    <div class="glass-card">
+        <h2>👁️ Ficha en Pantalla</h2>
+        <div class="carousel-container">
+            <div class="viewer-box">
+                <img id="active-image" src="" alt="Ficha" style="display: none;">
+                <div id="viewer-placeholder" class="viewer-placeholder">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.9 2.9m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375 0 1 1-.75 0 .375 0 0 1 .75 0Z"></path></svg>
+                    <p style="font-size: 0.9rem; font-weight: 500;">Sin contenido cargado</p>
+                    <p style="font-size: 0.78rem;">Vincula una carpeta con imágenes JPG/PNG para iniciar</p>
+                </div>
+            </div>
+
+            <div class="carousel-controls">
+                <button class="btn-nav" id="btn-prev" onclick="cambiarFicha(-1)" disabled>◀</button>
+                <div class="slide-info">
+                    <div id="slide-title" class="slide-filename">Selecciona una carpeta</div>
+                    <div id="slide-counter" class="slide-index">— / —</div>
+                </div>
+                <button class="btn-nav" id="btn-next" onclick="cambiarFicha(1)" disabled>▶</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Control & Configuration Card -->
+    <div class="glass-card">
+        <h2>⚙️ Configuración de Rotación</h2>
+        <div class="config-grid">
+            <div class="row-config">
+                <div class="config-label-container">
+                    <div class="config-label">Rotación Automática</div>
+                    <div class="config-desc">Cambia el fondo de pantalla periódicamente</div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="switch-rotate" onchange="actualizarConfigNativa()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="row-config">
+                <div class="config-label-container">
+                    <div class="config-label">Intervalo de Rotación</div>
+                    <div class="config-desc">Frecuencia de actualización en segundo plano</div>
+                </div>
+                <select id="select-interval" class="select-custom" onchange="actualizarConfigNativa()">
+                    <option value="15">Cada 15 minutos</option>
+                    <option value="30">Cada 30 minutos</option>
+                    <option value="60" selected>Cada 1 hora</option>
+                    <option value="180">Cada 3 horas</option>
+                    <option value="360">Cada 6 horas</option>
+                    <option value="720">Cada 12 horas</option>
+                    <option value="1440">Cada 24 horas</option>
+                </select>
+            </div>
+
+            <div class="row-config">
+                <div class="config-label-container">
+                    <div class="config-label">Modo de Selección</div>
+                    <div class="config-desc">Orden en el que se muestran las fichas</div>
+                </div>
+                <select id="select-random" class="select-custom" onchange="actualizarConfigNativa()">
+                    <option value="false" selected>Secuencial (A-Z)</option>
+                    <option value="true">Aleatorio</option>
+                </select>
+            </div>
+
+            <div class="row-config">
+                <div class="config-label-container">
+                    <div class="config-label">Pantalla de Destino</div>
+                    <div class="config-desc">Dónde se aplicará el fondo</div>
+                </div>
+                <select id="select-destination" class="select-custom" onchange="actualizarConfigNativa()">
+                    <option value="lock" selected>Pantalla de Bloqueo</option>
+                    <option value="home">Pantalla de Inicio</option>
+                    <option value="both">Ambas Pantallas</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Fast Actions -->
+    <div class="glass-card" style="padding: 15px;">
+        <div class="action-footer">
+            <button class="btn-action btn-secondary" id="btn-force-rotate" onclick="forzarRotacionNativa()" disabled>
+                🔄 Rotar Siguiente
+            </button>
+            <button class="btn-action" id="btn-apply-manual" onclick="aplicarFondoManual()" disabled>
+                📌 Fijar Fondo Actual
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Popups -->
+    <div id="toast-container"></div>
+
+    <script>
+        // Declaración de variables globales
+        let imageList = [];
+        let currentIndex = 0;
+        let imageCache = {}; // Cache para base64 cargados
+        const WallpaperPlugin = (typeof Capacitor !== 'undefined') ? Capacitor.Plugins.WallpaperPlugin : null;
+
+        // Cargar estado al iniciar la app
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (WallpaperPlugin) {
+                try {
+                    const status = await WallpaperPlugin.getRotationStatus();
+                    
+                    // Si ya hay una carpeta guardada
+                    if (status && status.folderUri) {
+                        mostrarEstadoCarpeta(status.folderName, status.folderUri, status.totalImages);
+                        
+                        // Cargar controles UI
+                        document.getElementById('switch-rotate').checked = status.rotationEnabled;
+                        document.getElementById('select-interval').value = status.rotationInterval;
+                        document.getElementById('select-destination').value = status.rotationMode;
+                        document.getElementById('select-random').value = status.rotationRandom ? "true" : "false";
+                        
+                        actualizarInsigniaEstado(status.rotationEnabled);
+                        
+                        // Cargar lista de imágenes
+                        await cargarListaFichas();
+                        
+                        // Restaurar posición actual
+                        if (imageList.length > 0) {
+                            currentIndex = Math.min(status.currentIndex, imageList.length - 1);
+                            if (currentIndex < 0) currentIndex = 0;
+                            await renderizarFichaActiva();
+                        }
+                    }
+                } catch (e) {
+                    showToast("Error al inicializar: " + e.message, "error");
+                }
+            } else {
+                showToast("Ejecutando en entorno web simulado", "success");
+            }
+        });
+
+        // 1. Selector de Carpeta
+        async function seleccionarCarpeta() {
+            if (!WallpaperPlugin) {
+                // Simulación en desarrollo web
+                showToast("Simulador SAF: Carpeta seleccionada", "success");
+                imageList = [
+                    { name: "001_Washington.png", uri: "sim_1" },
+                    { name: "002_Adams.png", uri: "sim_2" },
+                    { name: "003_Jefferson.png", uri: "sim_3" }
+                ];
+                mostrarEstadoCarpeta("Fichas de Estudio Simuladas", "content://com.android.externalstorage...", imageList.length);
+                currentIndex = 0;
+                await renderizarFichaActiva();
+                return;
+            }
+
+            try {
+                const result = await WallpaperPlugin.selectFolder();
+                if (result && result.success) {
+                    mostrarEstadoCarpeta(result.folderName, result.folderUri, result.totalImages);
+                    showToast("Carpeta vinculada correctamente", "success");
+                    
+                    // Cargar fichas
+                    await cargarListaFichas();
+                    currentIndex = 0;
+                    if (imageList.length > 0) {
+                        await renderizarFichaActiva();
+                    }
+                }
+            } catch (err) {
+                showToast(err.message, "error");
+            }
+        }
+
+        function mostrarEstadoCarpeta(name, path, count) {
+            document.getElementById('folder-empty-state').style.display = 'none';
+            document.getElementById('folder-loaded-state').style.display = 'block';
+            document.getElementById('folder-display-name').innerText = name || "Carpeta Vinculada";
+            document.getElementById('folder-display-path').innerText = path;
+            document.getElementById('image-count').innerText = `${count} fichas`;
+            
+            // Habilitar controles
+            document.getElementById('btn-force-rotate').disabled = count === 0;
+        }
+
+        // 2. Cargar Lista de Imágenes desde el plugin nativo
+        async function cargarListaFichas() {
+            if (!WallpaperPlugin) return;
+            try {
+                const res = await WallpaperPlugin.getFolderImages();
+                imageList = res.images || [];
+                
+                // Limpiar caché
+                imageCache = {};
+                
+                // Actualizar estado de botones
+                const hasImages = imageList.length > 0;
+                document.getElementById('btn-prev').disabled = !hasImages;
+                document.getElementById('btn-next').disabled = !hasImages;
+                document.getElementById('btn-apply-manual').disabled = !hasImages;
+                
+            } catch (e) {
+                showToast("Error cargando fichas: " + e.message, "error");
+            }
+        }
+
+        // 3. Renderizar imagen activa con precarga
+        async function renderizarFichaActiva() {
+            if (imageList.length === 0) {
+                document.getElementById('active-image').style.display = 'none';
+                document.getElementById('viewer-placeholder').style.display = 'flex';
+                document.getElementById('slide-title').innerText = "Carpeta sin imágenes";
+                document.getElementById('slide-counter').innerText = "— / —";
+                return;
+            }
+
+            const activeImgEl = document.getElementById('active-image');
+            const placeholderEl = document.getElementById('viewer-placeholder');
+            const slide = imageList[currentIndex];
+            
+            // Actualizar datos de texto inmediatamente
+            document.getElementById('slide-title').innerText = slide.name;
+            document.getElementById('slide-counter').innerText = `${currentIndex + 1} / ${imageList.length}`;
+            
+            // Habilitar controles manuales
+            document.getElementById('btn-apply-manual').disabled = false;
+
+            try {
+                // Obtener base64 (usando caché si existe)
+                const base64 = await obtenerBase64ConCache(currentIndex);
+                
+                // Desvanecer para una transición fluida
+                activeImgEl.style.opacity = 0;
+                setTimeout(() => {
+                    activeImgEl.src = `data:image/png;base64,${base64}`;
+                    activeImgEl.style.display = 'block';
+                    placeholderEl.style.display = 'none';
+                    activeImgEl.style.opacity = 1;
+                }, 50);
+
+                // Precargar fichas adyacentes para una navegación cómoda e instantánea
+                precargarAdyacentes();
+
+            } catch (err) {
+                showToast("Error al cargar imagen: " + err.message, "error");
+            }
+        }
+
+        // Obtener base64 con caché integrada
+        async function obtenerBase64ConCache(idx) {
+            if (idx < 0 || idx >= imageList.length) return "";
+            
+            if (imageCache[idx]) {
+                return imageCache[idx];
+            }
+
+            if (!WallpaperPlugin) {
+                // Mock base64 roja/azul/verde para navegador simulado
+                const colors = ["iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==", 
+                                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPj/HwADEwGPwq70awAAAABJRU5ErkJggg==", 
+                                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="];
+                imageCache[idx] = colors[idx % colors.length];
+                return imageCache[idx];
+            }
+
+            const res = await WallpaperPlugin.loadImage({ uri: imageList[idx].uri });
+            imageCache[idx] = res.base64;
+            return res.base64;
+        }
+
+        // Precargar el elemento anterior y posterior
+        function precargarAdyacentes() {
+            const nextIdx = (currentIndex + 1) % imageList.length;
+            const prevIdx = (currentIndex - 1 + imageList.length) % imageList.length;
+            
+            // Precargar asíncronamente
+            obtenerBase64ConCache(nextIdx).catch(() => {});
+            obtenerBase64ConCache(prevIdx).catch(() => {});
+        }
+
+        // Navegar por el carrusel
+        async function cambiarFicha(direccion) {
+            if (imageList.length === 0) return;
+            currentIndex = (currentIndex + direccion + imageList.length) % imageList.length;
+            await renderizarFichaActiva();
+        }
+
+        // 4. Aplicar Fondo Actual Manualmente
+        async function aplicarFondoManual() {
+            if (imageList.length === 0) return;
+            
+            const slide = imageList[currentIndex];
+            const dest = document.getElementById('select-destination').value;
+            
+            showToast("Aplicando fondo de estudio...", "success");
+
+            if (!WallpaperPlugin) {
+                showToast(`[Simulador] Aplicado ${slide.name} en ${dest.toUpperCase()}`, "success");
+                return;
+            }
+
+            try {
+                const res = await WallpaperPlugin.setWallpaperFromUri({
+                    uri: slide.uri,
+                    destination: dest
+                });
+
+                if (res && res.success) {
+                    showToast("Ficha inyectada con éxito", "success");
+                } else {
+                    showToast("No se pudo aplicar el fondo", "error");
+                }
+            } catch (err) {
+                showToast("Error: " + err.message, "error");
+            }
+        }
+
+        // 5. Guardar configuraciones y sincronizar con Android WorkManager
+        async function actualizarConfigNativa() {
+            const enabled = document.getElementById('switch-rotate').checked;
+            const interval = parseInt(document.getElementById('select-interval').value);
+            const mode = document.getElementById('select-destination').value;
+            const random = document.getElementById('select-random').value === "true";
+
+            actualizarInsigniaEstado(enabled);
+
+            if (!WallpaperPlugin) {
+                showToast(`[Simulador Config] Activo: ${enabled}, Int: ${interval}m, Dest: ${mode}, Aleatorio: ${random}`, "success");
+                return;
+            }
+
+            try {
+                await WallpaperPlugin.setAutorotate({
+                    enable: enabled,
+                    interval: interval,
+                    mode: mode,
+                    random: random
+                });
+                
+                if (enabled) {
+                    showToast(`Rotación configurada cada ${interval} minutos`, "success");
+                } else {
+                    showToast("Rotación automática desactivada", "success");
+                }
+            } catch (err) {
+                showToast("Error de configuración: " + err.message, "error");
+            }
+        }
+
+        // 6. Forzar cambio al siguiente fondo inmediato
+        async function forzarRotacionNativa() {
+            showToast("Encolando siguiente ficha...", "success");
+            
+            if (!WallpaperPlugin) {
+                showToast("[Simulador] Rotación forzada al siguiente", "success");
+                return;
+            }
+
+            try {
+                const res = await WallpaperPlugin.forceRotate();
+                if (res && res.success) {
+                    showToast("Siguiente ficha inyectada", "success");
+                    
+                    // Recargar estatus de rotación nativa después de un pequeño retraso
+                    setTimeout(async () => {
+                        const status = await WallpaperPlugin.getRotationStatus();
+                        if (status && imageList.length > 0) {
+                            currentIndex = Math.min(status.currentIndex, imageList.length - 1);
+                            if (currentIndex < 0) currentIndex = 0;
+                            await renderizarFichaActiva();
+                        }
+                    }, 1500);
+                }
+            } catch (err) {
+                showToast("Error: " + err.message, "error");
+            }
+        }
+
+        // Helper: Cambiar badge de estado en el header
+        function actualizarInsigniaEstado(activo) {
+            const badge = document.getElementById('status-badge');
+            if (activo) {
+                badge.className = "status-badge active";
+                badge.querySelector('span:last-child').innerText = "Rotación activa";
+            } else {
+                badge.className = "status-badge";
+                badge.querySelector('span:last-child').innerText = "Rotación inactiva";
+            }
+        }
+
+        // Helper: Generador de Toast estilizado Obsidian
+        function showToast(message, type = "success") {
+            const container = document.getElementById('toast-container');
+            
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            const icon = document.createElement('div');
+            icon.className = "toast-icon";
+            icon.innerText = type === "success" ? "✓" : "✗";
+            
+            const text = document.createElement('div');
+            text.innerText = message;
+            
+            toast.appendChild(icon);
+            toast.appendChild(text);
+            container.appendChild(toast);
+            
+            // Trigger animation
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            // Remove after 3.5s
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    container.removeChild(toast);
+                }, 300);
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
